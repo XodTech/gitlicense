@@ -17,13 +17,13 @@ struct ConfigOptions {
     always_update: bool,
 }
 
-const CONFIG_STRUCTURE: &str = r#"
+const DEFAULT_CONFIG: &str = r#"
 [User]
-Name = ""
+Name = "YOUR_NAME"
 [Settings]
 LicensesPath = "./licenses"
 SetDate = true
-AlwaysUpdate = true 
+AlwaysUpdate = true
 "#;
 
 fn main() {
@@ -60,7 +60,7 @@ fn read_settings() -> ConfigOptions {
         match fs::create_dir_all(&config_path) {
             Ok(_) => match fs::File::create(&full_config_path) {
                 Ok(_) => {
-                    fs::write(&full_config_path, &CONFIG_STRUCTURE).expect(
+                    fs::write(&full_config_path, &DEFAULT_CONFIG).expect(
                         "Failed to write default file structure in your configuration file",
                     );
                     println!(
@@ -87,7 +87,7 @@ fn read_settings() -> ConfigOptions {
     } else if Path::new(&config_path).exists() && !Path::new(&full_config_path).exists() {
         match fs::File::create(&full_config_path) {
             Ok(_) => {
-                fs::write(&full_config_path, &CONFIG_STRUCTURE)
+                fs::write(&full_config_path, &DEFAULT_CONFIG)
                     .expect("Failed to write default file structure in your configuration file");
                 println!(
                     "Configuration file was succesfully created with a default configuration in: {}",
