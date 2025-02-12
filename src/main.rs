@@ -28,27 +28,6 @@ SetDate = true
 AlwaysUpdate = true
 "#;
 
-fn main() {
-    let mut cmd: Vec<String> = env::args().collect();
-    cmd = correct_args(cmd);
-    let args = CommandArguments {
-        license_name: mem::take(&mut cmd[1]),
-        directory: mem::take(&mut cmd[2]),
-    };
-    let config_options = read_settings();
-    cmd_handler::handle(args, config_options);
-}
-
-fn correct_args(mut cmd: Vec<String>) -> Vec<String> {
-    if cmd.len() < 1 {
-        cmd.push("help".to_string())
-    }
-    if cmd.len() < 2 {
-        cmd.push(".".to_string())
-    }
-    return cmd;
-}
-
 fn read_settings() -> ConfigOptions {
     let homedir_path = {
         if cfg!(windows) {
@@ -130,4 +109,25 @@ fn read_settings() -> ConfigOptions {
         always_update:value["Settings"]["AlwaysUpdate"].as_bool().expect("Error while reading AlwaysUpdate setting in your configuration file,cannot estabilish true/false option"),
     };
     return config_options;
+}
+
+fn correct_args(mut cmd: Vec<String>) -> Vec<String> {
+    if cmd.len() < 1 {
+        cmd.push("help".to_string())
+    }
+    if cmd.len() < 2 {
+        cmd.push(".".to_string())
+    }
+    return cmd;
+}
+
+fn main() {
+    let mut cmd: Vec<String> = env::args().collect();
+    cmd = correct_args(cmd);
+    let args = CommandArguments {
+        license_name: mem::take(&mut cmd[1]),
+        directory: mem::take(&mut cmd[2]),
+    };
+    let config_options = read_settings();
+    cmd_handler::handle(args, config_options);
 }
