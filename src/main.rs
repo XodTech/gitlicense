@@ -112,10 +112,10 @@ fn read_settings() -> ConfigOptions {
 }
 
 fn correct_args(mut cmd: Vec<String>) -> Vec<String> {
-    if cmd.len() < 1 {
-        cmd.push("help".to_string())
-    }
     if cmd.len() < 2 {
+        cmd.push("--help".to_string())
+    }
+    if cmd.len() <= 3 {
         cmd.push(".".to_string())
     }
     return cmd;
@@ -124,6 +124,11 @@ fn correct_args(mut cmd: Vec<String>) -> Vec<String> {
 fn main() {
     let mut cmd: Vec<String> = env::args().collect();
     cmd = correct_args(cmd);
+
+    if cmd.len() < 3 {
+        panic("Not enough arguments provided!")
+    }
+
     let args = CommandArguments {
         license_name: mem::take(&mut cmd[1]),
         directory: mem::take(&mut cmd[2]),
