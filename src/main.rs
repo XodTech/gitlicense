@@ -10,21 +10,28 @@ mod cmd_handler;
 struct CommandArguments {
     license_name: String,
     directory: String,
+    custom_message: String
 }
 
 struct ConfigOptions {
     username: String,
-    liceenses_path: String,
+    target_license_filename:String,
+    licenses_path: String,
+    set_username:bool,
     set_date: bool,
+    set_custom_message: bool,
     always_update: bool,
 }
 
-const DEFAULT_CONFIG: &str = r#"
-[User]
+const DEFAULT_CONFIG: &str = r#"[User]
 Name = "YOUR_NAME"
+
 [Settings]
-LicensesPath = "./licenses"
+TargetLicenseFilename = "LICENSE"
+LicensesPath = "/licenses"
+SetUsername = true
 SetDate = true
+SetCustomMessage = true
 AlwaysUpdate = true
 "#;
 
@@ -54,7 +61,7 @@ fn read_settings() -> ConfigOptions {
             Ok(_) => match fs::File::create(&full_config_path) {
                 Ok(_) => {
                     fs::write(&full_config_path, &DEFAULT_CONFIG).expect(
-                        "Failed to write default file structure in your configuration file",
+                        "Failed to write default configuration in your configuration file",
                     );
                     println!(
                         "Configuration file was succesfully created with a default configuration in: {}",
@@ -81,7 +88,7 @@ fn read_settings() -> ConfigOptions {
         match fs::File::create(&full_config_path) {
             Ok(_) => {
                 fs::write(&full_config_path, &DEFAULT_CONFIG)
-                    .expect("Failed to write default file structure in your configuration file");
+                    .expect("Failed to write default configuration in your configuration file");
                 println!(
                     "Configuration file was succesfully created with a default configuration in: {}",
                     &full_config_path
@@ -103,9 +110,12 @@ fn read_settings() -> ConfigOptions {
         .parse::<Value>()
         .expect("Error while parsing config file");
     let config_options = ConfigOptions {
-        username: value["User"]["Name"].to_string(),
-        liceenses_path: value["Settings"]["LicensesPath"].to_string(),
+        username: value["User"]["Name"].to_string().replace('"',""),
+        target_license_filename: value["Settings"]["TargetLicenseFilename"].to_string().replace('"',""),
+        licenses_path: format!("{}{}",&config_path,value["Settings"]["LicensesPath"]).replace('"',""),
+        set_username: value["Settings"]["SetUsername"].as_bool().expect("Error while reading SetUsername setting in your configuration file,cannot estabilish true/false option"),
         set_date: value["Settings"]["SetDate"].as_bool().expect("Error while reading SetDate setting in your configuration file,cannot estabilish true/false option"),
+        set_custom_message: value["Settings"]["SetCustomMessage"].as_bool().expect("Error while reading SetCustomMessage setting in your configuration file,cannot estabilish true/false option"),
         always_update:value["Settings"]["AlwaysUpdate"].as_bool().expect("Error while reading AlwaysUpdate setting in your configuration file,cannot estabilish true/false option"),
     };
     return config_options;
@@ -113,10 +123,13 @@ fn read_settings() -> ConfigOptions {
 
 fn correct_args(mut cmd: Vec<String>) -> Vec<String> {
     if cmd.len() < 2 {
-        cmd.push("--help".to_string())
+        cmd.push("--help".to_string());
     }
-    if cmd.len() <= 3 {
-        cmd.push(".".to_string())
+    if cmd.len() < 3 {
+        cmd.push(".".to_string());
+    }
+    if cmd.len() < 4 {
+        cmd.push("".to_string());
     }
     return cmd;
 }
@@ -124,14 +137,14 @@ fn correct_args(mut cmd: Vec<String>) -> Vec<String> {
 fn main() {
     let mut cmd: Vec<String> = env::args().collect();
     cmd = correct_args(cmd);
-
-    if cmd.len() < 3 {
+    if cmd.len() < 4 {
         panic("Not enough arguments provided!")
     }
 
     let args = CommandArguments {
         license_name: mem::take(&mut cmd[1]),
         directory: mem::take(&mut cmd[2]),
+        custom_message: mem::take(&mut cmd[3])
     };
     let config_options = read_settings();
     cmd_handler::handle(args, config_options);
