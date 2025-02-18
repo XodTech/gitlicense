@@ -10,14 +10,14 @@ mod cmd_handler;
 struct CommandArguments {
     license_name: String,
     directory: String,
-    custom_message: String
+    custom_message: String,
 }
 
 struct ConfigOptions {
     username: String,
-    target_license_filename:String,
+    target_license_filename: String,
     licenses_path: String,
-    set_username:bool,
+    set_username: bool,
     set_date: bool,
     set_custom_message: bool,
     always_update: bool,
@@ -26,9 +26,11 @@ struct ConfigOptions {
 const DEFAULT_CONFIG: &str = r#"[User]
 Name = "YOUR_NAME"
 
-[Settings]
+[Paths]
 TargetLicenseFilename = "LICENSE"
-LicensesPath = "/licenses"
+LicensesPath = "./licenses"
+
+[Settings]
 SetUsername = true
 SetDate = true
 SetCustomMessage = true
@@ -60,9 +62,8 @@ fn read_settings() -> ConfigOptions {
         match fs::create_dir_all(&config_path) {
             Ok(_) => match fs::File::create(&full_config_path) {
                 Ok(_) => {
-                    fs::write(&full_config_path, &DEFAULT_CONFIG).expect(
-                        "Failed to write default configuration in your configuration file",
-                    );
+                    fs::write(&full_config_path, &DEFAULT_CONFIG)
+                        .expect("Failed to write default configuration in your configuration file");
                     println!(
                         "Configuration file was succesfully created with a default configuration in: {}",
                         &full_config_path
@@ -111,8 +112,8 @@ fn read_settings() -> ConfigOptions {
         .expect("Error while parsing config file");
     let config_options = ConfigOptions {
         username: value["User"]["Name"].to_string().replace('"',""),
-        target_license_filename: value["Settings"]["TargetLicenseFilename"].to_string().replace('"',""),
-        licenses_path: format!("{}{}",&config_path,value["Settings"]["LicensesPath"]).replace('"',""),
+        target_license_filename: value["Paths"]["TargetLicenseFilename"].to_string().replace('"',""),
+        licenses_path: format!("{}",value["Paths"]["LicensesPath"]).replace('"',"").replace('.',&config_path),
         set_username: value["Settings"]["SetUsername"].as_bool().expect("Error while reading SetUsername setting in your configuration file,cannot estabilish true/false option"),
         set_date: value["Settings"]["SetDate"].as_bool().expect("Error while reading SetDate setting in your configuration file,cannot estabilish true/false option"),
         set_custom_message: value["Settings"]["SetCustomMessage"].as_bool().expect("Error while reading SetCustomMessage setting in your configuration file,cannot estabilish true/false option"),
@@ -144,7 +145,7 @@ fn main() {
     let args = CommandArguments {
         license_name: mem::take(&mut cmd[1]),
         directory: mem::take(&mut cmd[2]),
-        custom_message: mem::take(&mut cmd[3])
+        custom_message: mem::take(&mut cmd[3]),
     };
     let config_options = read_settings();
     cmd_handler::handle(args, config_options);
