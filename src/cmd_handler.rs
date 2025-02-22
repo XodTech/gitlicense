@@ -10,7 +10,7 @@ pub fn handle(args: CommandArguments, config: ConfigOptions) {
             let target_file: String =
                 format!("{}/{}", args.directory, config.target_license_filename);
             if !Path::new(&target_file).exists()
-                || Path::new(&target_file).exists() && config.always_update == true
+                || Path::new(&target_file).exists() && config.always_overwrite == true
             {
                 let license_path: String =
                     format!("{}/{}", config.licenses_path, args.license_name);

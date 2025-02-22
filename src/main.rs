@@ -20,7 +20,7 @@ struct ConfigOptions {
     set_username: bool,
     set_date: bool,
     set_custom_message: bool,
-    always_update: bool,
+    always_overwrite: bool,
 }
 
 const DEFAULT_CONFIG: &str = r#"[User]
@@ -34,7 +34,7 @@ LicensesPath = "./licenses"
 SetUsername = true
 SetDate = true
 SetCustomMessage = true
-AlwaysUpdate = true
+AlwaysOverwrite = true
 "#;
 
 fn read_settings() -> ConfigOptions {
@@ -117,7 +117,7 @@ fn read_settings() -> ConfigOptions {
         set_username: value["Settings"]["SetUsername"].as_bool().expect("Error while reading SetUsername setting in your configuration file,cannot estabilish true/false option"),
         set_date: value["Settings"]["SetDate"].as_bool().expect("Error while reading SetDate setting in your configuration file,cannot estabilish true/false option"),
         set_custom_message: value["Settings"]["SetCustomMessage"].as_bool().expect("Error while reading SetCustomMessage setting in your configuration file,cannot estabilish true/false option"),
-        always_update:value["Settings"]["AlwaysUpdate"].as_bool().expect("Error while reading AlwaysUpdate setting in your configuration file,cannot estabilish true/false option"),
+        always_overwrite:value["Settings"]["AlwaysOverwrite"].as_bool().expect("Error while reading AlwaysUpdate setting in your configuration file,cannot estabilish true/false option"),
     };
     return config_options;
 }
