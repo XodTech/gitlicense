@@ -1,4 +1,4 @@
-sudo cp gitlicense /bin
+sudo cp target/release/gitlicense /usr/bin
 echo "Gitlicense binary was succesfully installed"
 read -p "Would you like to add gl alias for gitlicense?(y/n)" input
 if [ "$input" = "y" ];then
