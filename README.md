@@ -66,10 +66,10 @@ TargetLicenseFilename  =  ""
 LicensesPath  =  ""  # Path to licenses you want to use
 
 [Settings]
-SetUsername  =  true/false
-SetDate  =  true/false
-SetCustomMessage  =  true/false
-AlwaysOverwrite  =  true/false
+SetUsername  =  true #or false
+SetDate  =  true #or false
+SetCustomMessage  =  true #or false
+AlwaysOverwrite  =  true #or false
 ```
 
 ## Adding Licenses
