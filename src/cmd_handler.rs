@@ -114,8 +114,25 @@ pub fn handle(args: CommandArguments, config: ConfigOptions) {
     }
 }
 fn show_help() {
+    let version:&str = env!("CARGO_PKG_VERSION");
     println!(
-        "Usage: gitlicense [license] [directory (current by default)] [custom_message (optional)]"
+        r#"
+
+gitlicense version {}
+Usage: gitlicense [license] [directory] [custom_message]
+
+Add a license to your Git repository.
+
+Arguments:
+* license: The type of license to add (required)
+* directory: The directory to add the license to (default: current directory)
+* custom_message: A custom message to include in the license (optional)
+
+Examples:
+  gitlicense MIT ./myproject
+  gitlicense Apache-2.0 ./myproject "Licensed for personal and commercial use"
+  gitlicense GPL-3.0.toml .
+"#,version
     );
     process::exit(0);
 }
