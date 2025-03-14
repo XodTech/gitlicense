@@ -1,3 +1,4 @@
+
 # Gitlicense - CLI Utility for Adding License File to Your Project
 
 ## Introduction
@@ -7,8 +8,8 @@ Gitlicense is a CLI utility that helps you add license files to your projects. I
 ## Getting Started
 
 
-1.  Install Gitlicense using the [instructions](#installation) below.
-2.  Configure it using the [instructions](#configuration) bellow
+1.  Install Gitlicense using the [installation instructions](#installation) below.
+2.  Configure it using the [configuration instructions](#configuration) bellow
 3. Run `gitlicense --help` to get available CLI arguments.
 
 ## Features
@@ -77,6 +78,12 @@ AlwaysOverwrite  =  true #or false
 ### Simple (One File) Licenses
 
 -   You need to add license content to a file with a name that you will use in the CLI, into the directory that you provided in the 'LicensesPath' field.
+-   Then you can modify license content and add there special elements:
+which will be automatically substituted by the CLI.
+Special elements you can provide:
+    + `[USERNAME]` - will be substituted with your username, as provided in the configuration
+    + `[DATE]` - will be substituted with the current year
+    + `[CUSTOM_MESSAGE]` - will be substituted with a custom message that you can provide when invoking the `gitlicense` command
 
 ### Complex (Two File Licenses)
 
@@ -85,7 +92,7 @@ AlwaysOverwrite  =  true #or false
 
 ```toml
 [LICENSE]  # Section for short license
-Content  =  ""
+Content  =  "" # Here you can add special elements,like in one file licenses
 [FULL_LICENSE]  # Section for full license
 Filename  =  ""
 Content  =  ""
@@ -105,11 +112,9 @@ To contribute to this repository:
 Please:
 * Follow the existing coding style
 * Test new features
-* Use commit messages that are meaningful and consistent in style with existing ones 
+* Use commit messages that are meaningful and consistent in style with existing ones
 
 ## License
 Gitlicense is released under the [GNU GPL 3.0 License](GPL-3.0).
 
 You can view my copyright notice in the [LICENSE file](LICENSE).
-
-
