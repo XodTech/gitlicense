@@ -25,7 +25,7 @@ Gitlicense is a CLI utility that helps you add license files to your projects. I
 -   Move to the directory where you cloned this repository.
 -   Ensure you have `rust` installed on your machine.
 -   Run the following command: `cargo build --release`.
--   Then, you can use the `install.sh` script or manually copy the executable binary to your `/bin` directory. Optionally, you can add an alias `gl = "gitlicense"` to your shell configuration.
+-   Then, you can use the `install.sh` script or manually copy the executable binary to your `/usr/bin` directory. Optionally, you can add an alias `gl = "gitlicense"` to your shell configuration.
 
 ### Windows:
 
