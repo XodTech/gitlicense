@@ -38,25 +38,35 @@ AlwaysOverwrite = true
 "#;
 
 fn read_settings() -> ConfigOptions {
-    let homedir_path = {
-        if cfg!(windows) {
-            env::var("USERPROFILE").ok()
-        } else if cfg!(unix) {
-            env::var("HOME").ok()
-        } else {
-            panic("This system is unsuported");
-            None
-        }
-    };
     let config_path: String = {
-        match homedir_path {
-            Some(path) => format!("{}/.config/gitlicense", path),
-            None => {
-                panic("Unable to find your home directory");
-                "".to_string()
-            }
-        }
+        if cfg!(windows) {
+            let home_dir_path = {
+                match env::var("USERPROFILE") {
+                    Ok(path) => path,
+                    Err(_) => {
+                        panic("Unable to find your userprofile directory");
+                        unreachable!();
+                    }
+                }
+            };
+           format!("{}\\gitlicense\\",home_dir_path)
+        }else if cfg!(unix) {
+            let home_dir_path = {
+                match env::var("HOME") {
+                    Ok(path) => path,
+                    Err(_) => {
+                        panic("Unable to find your home directory");
+                        unreachable!();
+                    }
+                }
+            };
+            format!("{}/.config/gitlicense/",home_dir_path)
+        }else{
+            panic("Your OS is not supported!");
+            unreachable!();
+        }    
     };
+
     let full_config_path: String = format!("{}/config.toml", config_path);
     if !Path::new(&full_config_path).exists() {
         match fs::create_dir_all(&config_path) {
@@ -74,7 +84,7 @@ fn read_settings() -> ConfigOptions {
                         "Error while creating configuration file,error message: {}",
                         e
                     )
-                    .as_str(),
+                        .as_str(),
                 ),
             },
             Err(e) => panic(
@@ -82,7 +92,7 @@ fn read_settings() -> ConfigOptions {
                     "Error while creating configuration directory,error message: {}",
                     e
                 )
-                .as_str(),
+                    .as_str(),
             ),
         }
     } else if Path::new(&config_path).exists() && !Path::new(&full_config_path).exists() {
@@ -100,13 +110,13 @@ fn read_settings() -> ConfigOptions {
                     "Error while creating configuration file,error message: {}",
                     e
                 )
-                .as_str(),
+                    .as_str(),
             ),
         }
     }
     // TODO:Automatically add commented default structure for toml configuration file
     let toml_string: String =
-        fs::read_to_string(&full_config_path).expect("Failed to read config file");
+    fs::read_to_string(&full_config_path).expect("Failed to read config file");
     let value = toml_string
         .parse::<Value>()
         .expect("Error while parsing config file");
