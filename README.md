@@ -8,8 +8,8 @@ Gitlicense is a CLI utility that helps you add license files to your projects. I
 ## Getting Started
 
 
-1.  Install Gitlicense using the [installation instructions](#installation) below.
-2.  Configure it using the [configuration instructions](#configuration) bellow
+1. Install Gitlicense using the [installation instructions](#installation) below.
+2. Configure it using the [configuration instructions](#configuration) bellow
 3. Run `gitlicense --help` to get available CLI arguments.
 
 ## Features
@@ -22,7 +22,7 @@ Gitlicense is a CLI utility that helps you add license files to your projects. I
 
 ### On UNIX-Based OS:
 
--   Move to the directory where you cloned this repository.
+-   Move into the directory where you cloned this repository.
 -   Ensure you have `rust` installed on your machine.
 -   Run the following command: `cargo build --release`.
 -   Then, you can use the `install.sh` script or manually copy the executable binary to your `/usr/bin` directory. Optionally, you can add an alias `gl = "gitlicense"` to your shell configuration.
@@ -115,6 +115,4 @@ Please:
 * Use commit messages that are meaningful and consistent in style with existing ones
 
 ## License
-Gitlicense is released under the [GNU GPL 3.0 License](GPL-3.0).
-
-You can view my copyright notice in the [LICENSE file](LICENSE).
+Gitlicense is a free software and it's released under the terms of the GNU GPL v3 [LICENSE file](LICENSE)
