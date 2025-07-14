@@ -114,7 +114,7 @@ pub fn handle(args: CommandArguments, config: ConfigOptions) {
     }
 }
 fn show_help() {
-    let version:&str = env!("CARGO_PKG_VERSION");
+    let version: &str = env!("CARGO_PKG_VERSION");
     println!(
         r#"
 
@@ -132,7 +132,8 @@ Examples:
   gitlicense MIT ./myproject
   gitlicense Apache-2.0 ./myproject "Licensed for personal and commercial use"
   gitlicense GPL-3.0.toml .
-"#,version
+"#,
+        version
     );
     process::exit(0);
 }

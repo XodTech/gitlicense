@@ -49,8 +49,8 @@ fn read_settings() -> ConfigOptions {
                     }
                 }
             };
-           format!("{}\\gitlicense\\",home_dir_path)
-        }else if cfg!(unix) {
+            format!("{}\\gitlicense\\", &home_dir_path)
+        } else if cfg!(unix) {
             let home_dir_path = {
                 match env::var("HOME") {
                     Ok(path) => path,
@@ -60,11 +60,11 @@ fn read_settings() -> ConfigOptions {
                     }
                 }
             };
-            format!("{}/.config/gitlicense/",home_dir_path)
-        }else{
+            format!("{}/.config/gitlicense/", &home_dir_path)
+        } else {
             panic("Your OS is not supported!");
             unreachable!();
-        }    
+        }
     };
 
     let full_config_path: String = format!("{}/config.toml", config_path);
@@ -84,7 +84,7 @@ fn read_settings() -> ConfigOptions {
                         "Error while creating configuration file,error message: {}",
                         e
                     )
-                        .as_str(),
+                    .as_str(),
                 ),
             },
             Err(e) => panic(
@@ -92,7 +92,7 @@ fn read_settings() -> ConfigOptions {
                     "Error while creating configuration directory,error message: {}",
                     e
                 )
-                    .as_str(),
+                .as_str(),
             ),
         }
     } else if Path::new(&config_path).exists() && !Path::new(&full_config_path).exists() {
@@ -110,13 +110,13 @@ fn read_settings() -> ConfigOptions {
                     "Error while creating configuration file,error message: {}",
                     e
                 )
-                    .as_str(),
+                .as_str(),
             ),
         }
     }
     // TODO:Automatically add commented default structure for toml configuration file
     let toml_string: String =
-    fs::read_to_string(&full_config_path).expect("Failed to read config file");
+        fs::read_to_string(&full_config_path).expect("Failed to read config file");
     let value = toml_string
         .parse::<Value>()
         .expect("Error while parsing config file");
